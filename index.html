@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Document</title>
+	</head>
+	<body>
+		<script>
+			function deepEquals(obj1, obj2) {
+				if (obj1 === obj2) return true;
+
+				if (
+					(Array.isArray(obj1) === true && Array.isArray(obj2) === false) ||
+					(Array.isArray(obj1) === false && Array.isArray(obj2) === true)
+				) {
+					return false;
+				}
+
+				if (obj1 !== Object(obj1) && obj2 !== Object(obj2)) return obj1 === obj2;
+
+				if (Object.keys(obj1).length !== Object.keys(obj2).length) return false;
+
+				for (let key in obj1) {
+					if (!(key in obj2)) return false;
+					if (!deepEquals(obj1[key], obj2[key])) return false;
+				}
+
+				return true;
+			}
+
+			console.log(deepEquals(1, 1)); //true
+			console.log(deepEquals(1, '1')); //false
+			console.log(deepEquals(null, null)); //true
+			console.log(deepEquals(null, undefined)); //false
+			console.log(deepEquals([], [])); //true
+			console.log(deepEquals({}, {})); //true
+			console.log(deepEquals([], {})); //false
+			console.log(deepEquals({ a: 123, b: { c: [4, 5, 6] } }, { a: 123, b: { c: [4, 5, 6] } })); //true
+			console.log(deepEquals({ a: 123, b: { c: [4, 5, 6] } }, { b: { c: [4, 5, 6] } })); //false
+			console.log(deepEquals({ a: 123, b: { c: [4, 5, 6] } }, { a: 123, b: { c: [4, '5', 6] } })); //false
+			console.log(deepEquals([1, 2, [3, 4]], [1, 2, [3, 4]])); //true
+			console.log(deepEquals([1, 2, [3, 4, { a: 'abc' }]], [1, 2, [3, 4, { a: 'abc' }]])); //true
+		</script>
+	</body>
+</html>
